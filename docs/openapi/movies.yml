@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  title: Movies API
+  version: 1.0-oas3
+paths:
+  /movies:
+    get:
+      summary: Get movies
+      description: Get movies
+      operationId: getMovies
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllMovies'
+    post:
+      summary: Create a movie
+      description: Create a movie
+      operationId: createMovie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        '201':
+          description: Created
+  /movies/{id}:
+    get:
+      summary: Get single movie
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+      parameters:
+      - name: id
+        in: path
+        description: ID of movie to use
+        required: true
+        schema:
+          type: string
+
+servers:
+  - url: /v1
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Movie:
+      properties:
+        name:
+          type: string
+        casts:
+          type: array
+          items:
+            type: string
+        release_date:
+          type: string
+        director:
+          type: string
+        ratings:
+          type: object
+          additionalProperties:
+            type: number
+    AllMovies:
+      type: array
+      items:
+        $ref: '#/components/schemas/Movie'
+security:
+  - bearerAuth: []
